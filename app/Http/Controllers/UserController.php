@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 use App\Http\Resources\UserResource;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 class UserController extends Controller
 {
     /**
@@ -64,7 +64,8 @@ class UserController extends Controller
     //231011701331
     public function show($id)
     {
-         $user = User::findOrFail($id);
+        try {
+            $user = User::findOrFail($id);
 
         return new UserResource($user);
     } catch (ModelNotFoundException $e) {
@@ -83,22 +84,38 @@ class UserController extends Controller
         ], 500);
     }
 
-    
     /**
      * Update the specified resource in storage.
-     * updated by : Angga Cakraswara - 231011700018
+     *  Angga Cakraswara - 231011700018
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'password' => 'nullable|string|min:6',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->input('password'));
+        }
+
+        $user->save();
+
+        return new UserResource($user);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
+     * Rizki Putra
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
