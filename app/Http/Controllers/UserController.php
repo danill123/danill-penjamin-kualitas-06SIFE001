@@ -104,12 +104,23 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-           $user = User::findOrFail($id);
+    try {
 
-    $user->delete();
+        $user = User::findOrFail($id);
 
-    return response()->json([
-        'message' => 'User berhasil dihapus'
-    ], 200);
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User berhasil dihapus'
+        ], 200);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal menghapus user',
+            'error' => $e->getMessage()
+        ], 500);
+    }   
     }
-}
