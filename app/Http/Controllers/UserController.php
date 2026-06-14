@@ -65,23 +65,24 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            $user = User::findOrFail($id);
+                $user = User::findOrFail($id);
 
-        return new UserResource($user);
-    } catch (ModelNotFoundException $e) {
+            return new UserResource($user);
+        } catch (ModelNotFoundException $e) {
 
-        return response()->json([
-            'success' => false,
-            'message' => 'User tidak ditemukan'
-        ], 404);
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ditemukan'
+            ], 404);
 
-    } catch (\Exception $e) {
+        } catch (\Exception $e) {
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Terjadi kesalahan pada server',
-            'error' => $e->getMessage()
-        ], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan pada server',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -141,3 +142,4 @@ class UserController extends Controller
         ], 500);
     }   
     }
+}
