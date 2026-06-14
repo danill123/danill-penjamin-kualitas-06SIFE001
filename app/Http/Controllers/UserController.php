@@ -30,7 +30,8 @@ class UserController extends Controller
     //Esa Faiz Nurdin
     //231011701143
     public function store(Request $request)
-    {
+{
+    try {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -44,7 +45,14 @@ class UserController extends Controller
         ]);
 
         return new UserResource($user);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Terjadi kesalahan'
+        ], 500);
     }
+}
     /**
      * Display the specified resource.
      *
