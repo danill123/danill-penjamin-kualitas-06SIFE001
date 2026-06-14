@@ -46,7 +46,7 @@ class UserController extends Controller
     
     /**
      * Update the specified resource in storage.
-     * updated by : Angga Cakraswara - 231011700018
+     * updated by : Angga Cakraswara - 231011700018 - 06SIFE001
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
