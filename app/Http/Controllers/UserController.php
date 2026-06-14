@@ -38,9 +38,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    //Fauzan Ibnu Shihab
+    //231011701331
     public function show($id)
     {
-        //
+         $user = User::findOrFail($id);
+
+        return new UserResource($user);
     }
 
     
