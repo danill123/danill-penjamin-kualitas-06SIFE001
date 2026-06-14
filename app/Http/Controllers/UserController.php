@@ -59,6 +59,20 @@ class UserController extends Controller
          $user = User::findOrFail($id);
 
         return new UserResource($user);
+    } catch (ModelNotFoundException $e) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'User tidak ditemukan'
+        ], 404);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan pada server',
+            'error' => $e->getMessage()
+        ], 500);
     }
 
     
