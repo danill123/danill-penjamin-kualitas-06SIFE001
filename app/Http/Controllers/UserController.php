@@ -67,19 +67,21 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
 
-            return new UserResource($user);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'User tidak ditemukan'
-            ], 404);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan pada server',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return new UserResource($user);
+    } catch (ModelNotFoundException $e) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'User tidak ditemukan'
+        ], 404);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan pada server',
+            'error' => $e->getMessage()
+        ], 500);
     }
 
     /**
@@ -119,12 +121,23 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-           $user = User::findOrFail($id);
+    try {
 
-    $user->delete();
+        $user = User::findOrFail($id);
 
-    return response()->json([
-        'message' => 'User berhasil dihapus'
-    ], 200);
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User berhasil dihapus'
+        ], 200);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal menghapus user',
+            'error' => $e->getMessage()
+        ], 500);
+    }   
     }
-}
